@@ -1,0 +1,293 @@
+<div ng-include="'views/partials/usernav.html'"></div>
+<h1 class="lead alert alert-danger" role="alert" ng-if="location.messageObject.message != ''">{{location.messageObject.message}}</h1>
+<div class="container viewbg">
+    <div class="viewfg">
+        <!-- display current world and location -->
+        <div class="row">
+            <h2 class="titleh2" class="clickable" ng-click="location.returnToWorldHome()">{{location.worldsObject.curWorld.worldName}}</h2>
+            <h3 class="titleh3">{{location.locationsObject.curLoc.locName}}</h3>
+            <hr />
+        </div>
+
+        <!-- sights -->
+        <div class="row" id="sights">
+            <!-- left side -->
+            <div class="col col-lg-4 col-md-4 col-sm-12" id="sightNames">
+                <!-- display all sights -->
+                <div class="leftSide">
+                    <h4>Sights (click to edit): </h4>
+                    <hr />
+                    <div ng-repeat="sight in location.sightsObject.curSights">
+                        <p class="clickable" ng-click="location.displayDesc(sight); location.displayViewForSight()">{{sight.sightName}} <span class="glyphicon glyphicon-minus clickable" ng-click="location.sightDeleter(sight._id)"></span></p>
+                    </div>
+                    <hr />
+                    <span class="glyphicon glyphicon-plus clickable" ng-click="location.newSight()"></span>
+                </div>
+                <!-- end display sights -->
+            </div>
+            <!-- end left side-->
+
+            <!-- right side -->
+            <div class="col col-lg-8 col-md-8 col-sm-12">
+                <!-- display sight name and description -->
+                <div class="rightSide" id="sightDetail" ng-show="location.displayDescViewSight">
+                    <h3>{{location.sightsObject.curSight.sightName}}</h3>
+                    <p>{{location.sightsObject.curSight.sightDesc}}</p>
+                    <span class="glyphicon glyphicon-pencil" ng-click="location.editSight()" ng-show="location.sightsObject.curSight._id"></span>
+                </div>
+                <!-- end sight description -->
+
+                <!-- edit sight -->
+                <div class="rightSide" ng-show="location.editSightView">
+                    <h4>Edit Sight:</h4>
+                    <form class="form-horizontal" ng-submit="location.sightUpdater(location.sightsObject.curSight); location.displayViewForSight()">
+
+                        <div class="form-group">
+                            <label for="sightName" class="col-sm-2 control-label">Keyword:</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="sightName" placeholder="{{location.sightsObject.curSight.sightName}}" ng-model="location.sightsObject.curSight.sightName" />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="response" class="col-sm-2 control-label">Look response:</label>
+                            <div class="col-sm-10">
+                                <input type="textarea" class="form-control" id="response" placeholder="{{location.sightsObject.curSight.sightDesc}}" ng-model="location.sightsObject.curSight.sightDesc" />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-10">
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" ng-model="location.sightsObject.curSight.isImportant"> Check if this sight is important to the story (not seen by players) </input>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-10">
+                                <button type="submit" class="btn btn-default">Update</button>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+                <!-- end edit sight -->
+
+                <!-- add sight -->
+                <div class="rightSide" ng-show="location.addSightView">
+                    <h4>Add Sight:</h4>
+                    <hr>
+                    <form class="form-horizontal" ng-submit="location.sightCreator(location.sightsObject.curSight); location.displayViewForSight()">
+
+                        <div class="form-group">
+                            <label for="sightName" class="col-sm-2 control-label">Keyword:</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="sightName" placeholder="sightName" ng-model="location.sightsObject.curSight.sightName">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="sightDesc" class="col-sm-2 control-label">Look response:</label>
+                            <div class="col-sm-10">
+                                <input type="textarea" class="form-control" id="sightDesc" placeholder="response" ng-model="location.sightsObject.curSight.sightDesc">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-10">
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" ng-model="location.sightsObject.curSight.isImportant"> Check if this sight is important to the story (not seen by players) </input>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-10">
+                                <button type="submit" class="btn btn-default">Add</button>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+                <!-- end add sight -->
+            </div>
+            <!-- end left side -->
+        </div>
+        <!-- end sights -->
+        <hr>
+
+        <!-- exits -->
+        <div class="row">
+            <!-- right side -->
+            <div class="col col-lg-4 col-md-4 col-sm-12">
+
+                <!-- display current exits -->
+                <div class="leftSide">
+                    <h4>Exits (click to edit): </h4>
+                    <hr />
+                    <div ng-repeat="exit in location.exitsObject.curExits">
+                        <p ng-click="location.displayDesc(exit); location.displayViewForExit()">{{exit.exitDir}} <span class="glyphicon glyphicon-minus" ng-click="location.exitDeleter(exit._id)"></span></p>
+                    </div>
+                    <hr />
+                    <span class="glyphicon glyphicon-plus" ng-click="location.newExit()"></span>
+                </div>
+                <!-- end display exits -->
+
+            </div>
+            <!-- end right side -->
+
+            <!-- left side -->
+            <div class="col col-lg-8 col-md-8 col-sm-12">
+
+                <!-- display exits-->
+                <div class="rightSide" id="exitDetail" ng-show="location.displayDescViewExit">
+                    <h3>{{location.exitsObject.curExit.exitDir}}</h3><br />
+                    <!-- <h2>{{location.exitsObject.curExit._destLoc}}</h2> -->
+                    <p>{{location.exitsObject.curExit.exitDesc}}</p>
+                    <span class="glyphicon glyphicon-pencil" ng-click="location.editExit()" ng-show="location.exitsObject.curExit._id"></span>
+                </div>
+                <!-- end display exits -->
+
+                <!-- edit exits -->
+                <div class="rightSide" ng-show="location.editExitView">
+                    <h4>Edit Exit:</h4>
+                    <hr>
+                    <form class="form-horizontal" id="editExit" ng-submit="location.exitUpdater(location.exitsObject.curExit); location.displayViewForExit()">
+
+                        <div class="form-group">
+                            <label for="exitDir" class="col-sm-2 control-label"> Select exit direction: </label><br>
+                            <div class="col-sm-10">
+                                <select name="exitDirSelect" id="exitDirSelect" ng-model="location.exitsObject.curExit.exitDir">
+                                  <option value="{{location.exitsObject.curExit.exitDir}}">Current ({{location.exitsObject.curExit.exitDir}})</option> 
+                                  <option value="north">North</option>
+                                  <option value="east">East</option>
+                                  <option value="south">South</option>
+                                  <option value="west">West</option>
+                                </select><br>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="exitDest" class="col-sm-2 control-label"> Select exit destination: </label><br>
+                            <div class="col-sm-10">
+                                <select name="exitDestSelect" id="exitDestSelect" ng-model="location.exitsObject.curExit._destLoc" ng-options="loc.locName for loc in location.locationsObject.curLocs">
+                                    <!-- <option value="{{location.exitsObject.curExit._destLoc}}">Current ({{location.exitsObject.curExit._destLoc}})</option> -->
+                                </select><br/>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="exitDesc" class="col-sm-2 control-label">Exit Description:</label>
+                            <div class="col-sm-10">
+                                <textarea class="form-control" id="exitDesc" form="editExit" cols="60" rows="2" placeholder="{{location.exitsObject.curExit.exitDesc}}" ng-model="location.exitsObject.curExit.exitDesc"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-10">
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" ng-model="location.exitsObject.curExit.open"> Leave checked if this exit is open </input>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-10">
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" ng-model="location.exitsObject.curExit.unlocked"> Leave checked if this exit is unlocked</input>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-10">
+                                <button type="submit" class="btn btn-default">Update</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <!-- end edit exit -->
+
+                <!-- add exit -->
+                <div class="rightSide" ng-show="location.addExitView">
+                    <h4>Add Exit:</h4>
+                    <hr>
+                    <form class="form-horizontal" ng-submit="location.exitCreator(location.exitsObject.curExit); location.displayViewForExit()">
+
+                        <div class="form-group">
+                            <label for="exitDir" class="col-sm-2 control-label"> Select exit direction::</label><br>
+                            <div class="col-sm-10">
+                                <select name="exitDirSelect" id="exitDirSelect" ng-model="location.exitsObject.curExit.exitDir">
+                                    <option value="">---Please select---</option> <!-- not selected / blank option -->
+                                    <option value="north">North</option>
+                                    <option value="east">East</option>
+                                    <option value="south">South</option>
+                                    <option value="west">West</option>
+                                </select><br>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="_destLoc" class="col-sm-2 control-label"> Select exit destination:</label><br>
+                            <div class="col-sm-10">
+                                <select name="destLocSelect" id="destLocSelect" ng-model="location.exitsObject.curExit._destLoc" ng-options="loc._id as loc.locName for loc in location.locationsObject.curLocs">
+                                    <option value="">---Please select---</option> <!-- not selected / blank option -->
+                                </select><br>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <label for="exitDesc" class="col-sm-2 control-label">Exit Description:</label>
+                            <div class="col-sm-10">
+                                <input type="textarea" class="form-control" id="exitDesc" placeholder="description" ng-model="location.exitsObject.curExit.exitDesc">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-10">
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" ng-model="location.exitsObject.curExit.open"> Leave checked if this exit is open</input>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-10">
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" ng-model="location.exitsObject.curExit.unlocked"> Leave checked if this exit is unlocked</input>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-10">
+                                <button type="submit" class="btn btn-default">Add</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <!-- end add exit -->
+            </div>
+            <!-- end left side -->
+        </div>
+        <!-- end exits -->
+
+        <!-- populate a list of current location objects -->
+        <!-- populate a list of current location characters -->
+        <!-- populate a list of current location eventListeners -->
+    </div>
+</div>

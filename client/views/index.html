@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <title>MUD FLAPS</title>
+    <meta name="viewport" content="width=device-width">
+    <link rel="stylesheet" href="/vendors/bootstrap/css/bootstrap.css">
+    <link rel="stylesheet" href="/styles/style.css">
+    <script type="text/javascript" src="/vendors/angular/angular.min.js"></script>
+    <script type="text/javascript" src="/vendors/angular-route/angular-route.min.js"></script>
+    <script type="text/javascript" src="/vendors/angular-ui-bootstrap/ui-bootstrap.js"></script>
+    <script type="text/javascript" src="/scripts/client.min.js"></script>
+  </head>
+
+  <body ng-app="app">
+    <header ng-include="'/views/partials/header.html'"></header>
+
+    <main ng-view></main>
+
+    
+    <!-- dev only - <script type="text/javascript" src="http://localhost:35729/livereload.js">
+    </script> -->
+  </body>
+
+</html>

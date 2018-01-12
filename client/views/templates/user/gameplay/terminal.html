@@ -1,0 +1,37 @@
+<div ng-include="'views/partials/usernav.html'"></div>
+<div class="terminalbg container">
+    <div class="terminalfg container">
+        <h2 class="titleh2">Gameplay Terminal</h2>
+        <hr>
+        <section class="console-section">
+            <!-- <section class="container centerme"> -->
+            <!-- LK - removed for integration -->
+            <!-- <section class="head">
+            <h1>ng-terminal-emulator</h1>
+            <h4>A terminal emulator in Javascript with AngularJS </h4>
+            <a href="https://github.com/vtortola/ng-terminal-emulator" class="gitHub" ng-click="gitHub()">
+                <small>View project on</small>
+                GitHub
+            </a>
+        </section> -->
+            <!-- LK - allows users to choose a vintage or modern theme to the terminal console -->
+            <!-- <div class="console-options">
+            <label><input type="radio" ng-model="theme" name="theme" value="vintage">Vintage</label>
+            <label><input type="radio" ng-model="theme" name="theme" value="modern">Modern</label>
+        </div> -->
+            <div ng-show="theme == 'vintage'">
+                <terminal terminal-class="vintage-terminal" terminal-config="vintage">
+                    <!-- <p class="click-me">Click terminal window to begin.</p> -->
+                </terminal>
+            </div>
+            <div ng-show="theme == 'modern'">
+                <terminal>
+                    <p class="click-me">Click terminal window to begin.</p>
+                </terminal>
+            </div>
+            <!-- <a class="unit-tests" href="tests" ng-click="unitTests()">Unit tests</a> -->
+
+            <!-- </section> -->
+        </section>
+    </div>
+</div>

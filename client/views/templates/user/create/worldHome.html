@@ -1,0 +1,231 @@
+<div ng-include="'views/partials/usernav.html'"></div>
+<h1 class="lead alert alert-danger" role="alert" ng-if="world.messageObject.message != ''">{{world.messageObject.message}}</h1>
+<div class="container viewbg">
+    <div class="viewfg">
+        <!-- Display World Name and Description -->
+        <div class="titlebox row">
+            <h2 class="titleh2">{{world.worldsObject.curWorld.worldName}}</h2>
+            <p class="titlep">{{world.worldsObject.curWorld.worldDesc}}</p>
+        </div>
+        <hr>
+
+        <!-- locations -->
+        <div class="row" id="locations">
+
+            <!-- left side -->
+            <div class="col col-lg-4 col-md-4 col-sm-12" id="locNames">
+                <!-- list locations -->
+                <div class="leftSide">
+                    <h4><strong>Locations: </strong>(click to edit)</h4>
+                    <hr>
+                    <div ng-repeat="loc in world.locationsObject.curLocs">
+                        <p><span class="clickable" ng-click="world.displayDesc(loc); world.displayViewForLoc()">{{loc.locName}} </span><span class="glyphicon glyphicon-minus clickable" ng-click="world.locationDeleter(loc._id)"></span></p>
+                    </div>
+                    <hr />
+                    <span class="glyphicon glyphicon-plus clickable" ng-click="world.addLocation()"></span>
+                </div>
+                  <!-- end list locations -->
+            </div>
+            <!-- end left side -->
+
+
+            <!-- right side -->
+            <div class="col col-lg-8 col-md-8 col-sm-12">
+                <!-- location name and description -->
+                <div class="rightSide" id="locDetail" ng-show="world.displayDescViewLoc">
+                    <h3>{{world.locationsObject.curLoc.locName}}</h3>
+                    <p>{{world.locationsObject.curLoc.locDesc}}</p>
+                    <p>{{world.locationsObject.curLoc.locNotes}}</p>
+                    <span class="glyphicon glyphicon-pencil clickable" ng-click="world.editLocation(world.locationsObject.curLoc)" ng-show="world.locationsObject.curLoc.locName"></span>
+                    <span class="	glyphicon glyphicon-arrow-right clickable" ng-click="world.chooseLocation(world.locationsObject.curLoc)" ng-show="world.locationsObject.curLoc.locName"></span>
+                </div>
+                <!-- end location description -->
+
+                <!-- edit location -->
+                <div class="rightSide" ng-show="world.editLocationView">
+                    <h4>Edit Location:</h4>
+                    <hr>
+                    <form class="form-horizontal" id="editLoc" ng-submit="world.locationUpdater(world.locationsObject.curLoc); world.displayViewForLoc()">
+
+                        <div class="form-group">
+                            <label for="locName" class="col-sm-2 control-label">Location Name:</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="locName" placeholder="{{world.locationsObject.curLoc.locName}}" ng-model="world.locationsObject.curLoc.locName">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="locDesc" class="col-sm-2 control-label">Location Description:</label>
+                            <div class="col-sm-10">
+                                <textarea rows="5" cols="60" class="form-control" id="locDesc" form="editLoc" placeholder="{{world.locationsObject.curLoc.locDesc}}" ng-model="world.locationsObject.curLoc.locDesc"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="locNotes" class="col-sm-2 control-label">Location Notes (not seen by users):</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="locNotes" placeholder="{{world.locationsObject.curLoc.locNotes}}" ng-model="world.locationsObject.curLoc.locNotes">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-10">
+                                <button type="submit" class="btn btn-default">Update</button>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+                <!-- end edit location -->
+
+                <!-- add location -->
+                <div class="rightSide" ng-show="world.addLocationView">
+                    
+                    <h4>Add Location:</h4>
+                    <hr>
+                    <form class="form-horizontal" id="addLoc" ng-submit="world.locationCreator(world.locationsObject.curLoc); world.displayViewForLoc()">
+
+                        <div class="form-group">
+                            <label for="locName" class="col-sm-2 control-label">Location Name:</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="locName" placeholder="name of location" ng-model="world.locationsObject.curLoc.locName">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="locDesc" class="col-sm-2 control-label">Location Description:</label>
+                            <div class="col-sm-10">
+                                <textarea cols="60" rows="5" class="form-control" id="locDesc" form="addLoc" placeholder="location description" ng-model="world.locationsObject.curLoc.locDesc"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="locNotes" class="col-sm-2 control-label">Location Notes (not seen by users):</label>
+                            <div class="col-sm-10">
+                                <input type="textarea" class="form-control" id="locNotes" placeholder="location notes" ng-model="world.locationsObject.curLoc.locNotes">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-10">
+                                <button type="submit" class="btn btn-default">Add</button>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+                <!-- end add location -->
+            </div>
+            <!-- end right side -->
+        </div>
+        <!-- end location -->
+
+        <hr />
+
+        <!-- items -->
+        <div class="row" id="items">
+            <!-- left side -->
+            <div class="col col-lg-4 col-md-4 col-sm-12" id="itemNames">
+                <div class="leftSide">
+                    <h4><strong>Items: </strong>(click to edit)</h4>
+                    <hr>
+                    <div ng-repeat="item in world.itemsObject.curItems">
+                        <p><span class="clickable" ng-click="world.displayDesc(item); world.displayViewForItem()">{{item.itemName}} </span><span class="glyphicon glyphicon-minus clickable" ng-click="world.itemDeleter(item._id)"></span></p>
+                    </div>
+                    <hr />
+                    <span class="glyphicon glyphicon-plus clickable" ng-click="world.addItem()"></span>
+                </div>
+            </div>
+            <!-- end left side -->
+
+            <!-- right side -->
+            <div class="col col-lg-8 col-md-8 col-sm-12">
+                <!-- display item name and description -->
+                <div class="rightSide" id="itemDetail" ng-show="world.displayDescViewItem">
+                    <h3>{{world.itemsObject.curItem.itemName}}</h3>
+                    <p>{{world.itemsObject.curItem.itemDesc}}</p>
+                    <p>{{world.itemsObject.curItem.itemNotes}}</p>
+                    <span class="glyphicon glyphicon-pencil clickable" ng-click="world.editItem()" ng-show="world.itemsObject.curItem.itemName"></span>
+                    <span class="	glyphicon glyphicon-arrow-right clickable" ng-click="world.chooseItem(worlds.itemsObject.curItem)" ng-show="world.itemsObject.curItem.itemName"></span>
+                </div>
+                <!-- end item description -->
+
+                <!-- Displays focused item for editing -->
+                <div class="rightSide" ng-show="world.editItemView">   
+                    <h4>Edit Item:</h4>
+                    <hr>
+                    <form class="form-horizontal" ng-submit="world.itemUpdater(world.itemsObject.curItem); world.displayViewForItem()">
+
+                        <div class="form-group">
+                            <label for="itemName" class="col-sm-2 control-label">Item Name:</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="itemName" placeholder="{{world.itemsObject.curItem.itemName}}" ng-model="world.itemsObject.curItem.itemName">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="itemDesc" class="col-sm-2 control-label">Item Description:</label>
+                            <div class="col-sm-10">
+                                <input type="textarea" class="form-control" id="itemDesc" placeholder="{{world.itemsObject.curItem.itemDesc}}" ng-model="world.itemsObject.curItem.itemDesc">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="itemNotes" class="col-sm-2 control-label">Item Notes (not seen by users):</label>
+                            <div class="col-sm-10">
+                                <input type="textarea" class="form-control" id="itemNotes" placeholder="{{world.itemsObject.curItem.itemNotes}}" ng-model="world.itemsObject.curItem.itemNotes">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-10">
+                                <button type="submit" class="btn btn-default">Update</button>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+                <!-- end edit item -->
+
+                <!-- add item -->
+                <div class="rightSide" ng-show="world.addItemView">
+                    <h4>Add Item:</h4>
+                    <hr>
+                    <form class="form-horizontal" ng-submit="world.itemCreator(world.itemsObject.curItem); world.displayViewForItem()">
+
+                        <div class="form-group">
+                            <label for="itemName" class="col-sm-2 control-label">Item Name:</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="itemName" placeholder="name of item" ng-model="world.itemsObject.curItem.itemName">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="itemDesc" class="col-sm-2 control-label">Item Description:</label>
+                            <div class="col-sm-10">
+                                <input type="textarea" class="form-control" id="itemDesc" placeholder="item description" ng-model="world.itemsObject.curItem.itemDesc">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="itemNotes" class="col-sm-2 control-label">Item Notes (not seen by users):</label>
+                            <div class="col-sm-10">
+                                <input type="textarea" class="form-control" id="itemNotes" placeholder="item notes" ng-model="world.itemsObject.curLoc.itemNotes">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-10">
+                                <button type="submit" class="btn btn-default">Add</button>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+                <!-- end add item -->
+            </div>
+            <!-- end right side -->
+        </div>
+        <!-- end item -->
+    </div>
+</div>

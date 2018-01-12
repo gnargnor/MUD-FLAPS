@@ -1,0 +1,22 @@
+<div ng-include="'views/partials/usernav.html'"></div>
+<h1 class="lead alert alert-danger" role="alert" ng-if="item.messageObject.message != ''">{{create.messageObject.message}}</h1>
+<div class="container">
+  <h2>Create an item</h2>
+    <form ng-submit="item.itemCreator(item.itemsObject.curItem)">
+        <div class="form-group">
+            <label for="itemName">Title Your Item:</label>
+            <input type="text" class="form-control" id="itemName" ng-model="item.itemsObject.curItem.itemName">
+        </div>
+        <div class="form-group">
+            <label for="itemDesc">a Short Description:</label>
+            <input type="text" class="form-control" id="itemDesc" ng-model="item.itemsObject.curItem.itemDesc">
+        </div>
+        <div class="form-group">
+            <label for="itemNotes">Item Notes (not visible during gameplay):</label>
+            <input type="text" class="form-control" id="itemNotes" ng-model="item.itemsObject.curItem.itemNotes">
+        </div>
+        <button type="submit" class="btn btn-default">Create</button>
+    </form>
+    <button ng-click="item.itemUpdater({itemName: 'turkey'})">Update Test</button>
+    <button ng-click="item.itemDeleter({itemName: 'eraser'})">Delete Test</button>
+</div>

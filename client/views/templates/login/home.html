@@ -1,0 +1,27 @@
+<div class="container loginContainer">
+  <div class="loginbg">
+    <div class="loginfg">
+      <h1 class="lead titleh1">Login</h1>
+      <h1 class="lead alert alert-danger" role="alert" ng-if="login.message != ''">{{login.message}}</h1>
+
+      <form class="form-inline loginForm" ng-submit="login.login()">
+
+        <div>
+          <label class="inputText" for="username">Username:</label>
+          <input class="inputText" type="text" ng-model="login.user.username" />
+        </div>
+
+        <div>
+          <label for="password">Password:</label>
+          <input class="inputText" type="password" ng-model="login.user.password" />
+        </div>
+
+        <div>
+          <input class="btn btn-default" type="submit" name="submit" value="Log In" />
+          <a href="#register">Register</a>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</div>
