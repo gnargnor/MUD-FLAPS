@@ -20,6 +20,7 @@ def index():
         login_user(user, remember=True)
         print(current_user.username)
         return jsonify({'username': current_user.username, 'isAdmin': False})
+    print('why me')
     return current_app.send_static_file('views/index.html')
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -45,7 +46,6 @@ def register():
 @app.route('/user')
 def user():
     ''' verifies client side routes - returns username if authenticated '''
-    print(current_user.username)
     if current_user.is_authenticated:
         # this is where we send the user data, for now
         return jsonify({'username': current_user.username, '_id': current_user.id})
@@ -57,6 +57,13 @@ def logout():
     logout_user()
     return jsonify({'username': None})
     # right now client doesn't expect anything, but it should be able to detect a 200 / 400 response and react accordingly
+
+@app.route('/world')
+@login_required
+def world():
+    return 'yar!'
+
+
 
         
 
