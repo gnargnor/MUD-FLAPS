@@ -2,7 +2,7 @@ from app import app, db
 from flask import request, redirect, url_for, send_from_directory, current_app, jsonify
 from werkzeug.security import generate_password_hash
 from flask_login import current_user, login_user, logout_user, login_required
-from app.models import User
+from app.models import User, World, Location
 from app.helpers import pluck
 from app.forms import LoginForm
 
@@ -47,6 +47,7 @@ def register():
 def user():
     ''' verifies client side routes - returns username if authenticated '''
     if current_user.is_authenticated:
+        print(current_user.id)
         # this is where we send the user data, for now
         return jsonify({'username': current_user.username, '_id': current_user.id})
     return 'no juice - not authenticated'
@@ -58,10 +59,17 @@ def logout():
     return jsonify({'username': None})
     # right now client doesn't expect anything, but it should be able to detect a 200 / 400 response and react accordingly
 
-@app.route('/world')
+@app.route('/world', methods=['GET', 'POST'])
 @login_required
 def world():
-    return 'yar!'
+    print(current_user.id)
+    print([world.serialize() for world in list(World.query.filter_by(creator_id=current_user.id).all())])
+    return jsonify(worlds=[world.serialize() for world in list(World.query.filter_by(creator_id=current_user.id).all())])
+
+@app.route('/location', methods=['GET', 'POST'])
+@login_required
+def location():
+    pass
 
 
 

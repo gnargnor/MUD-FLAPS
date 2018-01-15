@@ -35,6 +35,13 @@ class World(db.Model):
     game_count = db.Column(db.Integer)
     active = db.Column(db.Boolean, default=False, index=True)
 
+    def serialize(self):
+        return {
+            'worldName': self.name,
+            'worldDesc': self.desc,
+            'author': ''
+      }
+
     def __repr__(self):
         return '<World {0} id {1}>'.format(self.name, self.id)
 
@@ -42,8 +49,8 @@ class Location(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     creator_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     world_id = db.Column(db.Integer, db.ForeignKey('world.id'))
-    _items = db.relationship('Item', backref='location', lazy='dynamic')
-    _exits = db.relationship('Exit', backref='location', lazy='dynamic')
+    # _items = db.relationship('Item', backref='item_location', lazy='dynamic')
+    # _exits = db.relationship('Exit', backref='exit_location', lazy='dynamic')
     date_created = db.Column(db.DateTime, index=True)
     x = db.Column(db.Integer)
     y = db.Column(db.Integer)
@@ -89,6 +96,8 @@ class Exit(db.Model):
     creator_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     location_id = db.Column(db.Integer, db.ForeignKey('location.id'))
     dest_loc_id = db.Column(db.Integer, db.ForeignKey('location.id')) 
+    location = db.relationship('Location', foreign_keys=[location_id])
+    dest_loc = db.relationship('Location', foreign_keys=[dest_loc_id])
     date_created = db.Column(db.DateTime, index=True)
     description = db.Column(db.String(128))
     direction = db.Column(db.String)
