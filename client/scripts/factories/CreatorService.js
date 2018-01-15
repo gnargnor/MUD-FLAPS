@@ -61,7 +61,8 @@ app.factory('CreatorService', ['UserService', '$http', '$location', function(Use
   var worldGetter = function(){
     $http.get('/world')
       .then(function(response){
-        var worldsReturned = response.data;
+        console.log(response.data.worlds)
+        var worldsReturned = response.data.worlds;
         worldsObject.curWorlds = [];
         for (i=0;i<worldsReturned.length;i++){
           worldsObject.curWorlds.push(worldsReturned[i]);
