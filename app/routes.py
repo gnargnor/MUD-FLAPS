@@ -20,7 +20,6 @@ def index():
         login_user(user, remember=True)
         print(current_user.username)
         return jsonify({'username': current_user.username, 'isAdmin': False})
-    print('why me')
     return current_app.send_static_file('views/index.html')
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -62,14 +61,33 @@ def logout():
 @app.route('/world', methods=['GET', 'POST'])
 @login_required
 def world():
-    print(current_user.id)
-    print([world.serialize() for world in list(World.query.filter_by(creator_id=current_user.id).all())])
-    return jsonify(worlds=[world.serialize() for world in list(World.query.filter_by(creator_id=current_user.id).all())])
+    if request.method == 'GET':
+        worlds = [world.serialize() for world in list(World.query.filter_by(creator_id=current_user.id).all())]
+        return jsonify(worlds)
 
-@app.route('/location', methods=['GET', 'POST'])
+    if request.method == 'POST':
+        print('world post route: ', request.get_json())
+        data = request.get_json()
+        world_name, world_desc = pluck(data, 'worldName', 'worldDesc')
+        world = World(name=world_name, desc=world_desc, creator_id=current_user.id)
+        db.session.add(world)
+        db.session.commit()
+
+        new_world = World.query.filter_by(name=world_name, creator_id=current_user.id).first()
+        print(new_world)
+        if new_world:
+            print('new world!')
+            return jsonify(new_world.serialize())
+        return 'error saving world (lol)'
+
+    
+
+@app.route('/location/<_world_id>', methods=['GET'])
 @login_required
-def location():
-    pass
+def location(_world_id):
+    print('world id: {}'.format(_world_id))
+    print([location.serialize() for location in list(Location.query.filter_by(world_id=_world_id).all())])
+    return jsonify([location.serialize() for location in list(Location.query.filter_by(world_id=_world_id).all())])
 
 
 

@@ -35,12 +35,18 @@ class World(db.Model):
     game_count = db.Column(db.Integer)
     active = db.Column(db.Boolean, default=False, index=True)
 
+    def __init__(self, name, desc, creator_id):
+        self.name = name
+        self.desc = desc
+        self.creator_id = creator_id
+        self.date_created = datetime.now()
+
     def serialize(self):
         return {
             'worldName': self.name,
             'worldDesc': self.desc,
             'author': ''
-      }
+        }
 
     def __repr__(self):
         return '<World {0} id {1}>'.format(self.name, self.id)
@@ -55,12 +61,21 @@ class Location(db.Model):
     x = db.Column(db.Integer)
     y = db.Column(db.Integer)
     name = db.Column(db.String(128), unique=True, index=True)
-    description = db.Column(db.String)
-    short_description = db.Column(db.String)
+    desc = db.Column(db.String)
+    short_desc = db.Column(db.String)
     notes = db.Column(db.String)
+
+    def serialize(self):
+        return {
+            'locName': self.name,
+            'locDesc': self.desc,
+            'locShortDesc': self.short_desc,
+            'locNotes': self.notes
+        }
 
     def __repr__(self):
         return '<Location {0} id {1}>'.format(self.name, self.id)
+
 
 class Item(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -69,10 +84,17 @@ class Item(db.Model):
     location_id = db.Column(db.Integer, db.ForeignKey('location.id'))
     date_created = db.Column(db.DateTime, index=True)
     name = db.Column(db.String(128), unique=True, index=True)
-    description = db.Column(db.String)
+    desc = db.Column(db.String)
     # Targets could be items, users, etc - need parent class that each inherits from
     targets = db.Column(db.String)
     notes = db.Column(db.String)
+
+    def serialize(self):
+        return {
+            'itemName': self.name,
+            'itemDesc': self.desc,
+            'itemNotes': self.notes
+        }
 
     def __repr__(self):
         return '<Item {0} id {1)>'.format(self.name, self.id)
@@ -85,8 +107,15 @@ class Sight(db.Model):
     location_id = db.Column(db.Integer, db.ForeignKey('location.id'))
     date_created = db.Column(db.DateTime, index=True)
     name = db.Column(db.String(128), index=True)
-    description = db.Column(db.String)
+    desc = db.Column(db.String)
     important = db.Column(db.Boolean)
+
+    def serialize(self):
+        return {
+            'keyword': self.name,
+            'sightDesc': self.desc,
+            'isImportant': self.important
+        }
 
     def __repr__(self):
         return '<Sight {0} id{1}>'.format(self.name, self.id)
@@ -99,10 +128,19 @@ class Exit(db.Model):
     location = db.relationship('Location', foreign_keys=[location_id])
     dest_loc = db.relationship('Location', foreign_keys=[dest_loc_id])
     date_created = db.Column(db.DateTime, index=True)
-    description = db.Column(db.String(128))
+    desc = db.Column(db.String(128))
     direction = db.Column(db.String)
     is_open = db.Column(db.Boolean)
     is_unlocked = db.Column(db.Boolean)
+
+    def serialize(self):
+        return {
+            'exitDir': self.direction,
+            'exitDesc': self.desc,
+            '_destLoc': self.dest_loc,
+            'open': self.is_open,
+            'unlocked': self.is_unlocked
+        }
 
     def __repr__(self):
         return '<Exit {0} id{1}>'.format(self.description, self.id)

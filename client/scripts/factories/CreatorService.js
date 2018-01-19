@@ -61,8 +61,8 @@ app.factory('CreatorService', ['UserService', '$http', '$location', function(Use
   var worldGetter = function(){
     $http.get('/world')
       .then(function(response){
-        console.log(response.data.worlds)
-        var worldsReturned = response.data.worlds;
+        console.log(response.data)
+        var worldsReturned = response.data;
         worldsObject.curWorlds = [];
         for (i=0;i<worldsReturned.length;i++){
           worldsObject.curWorlds.push(worldsReturned[i]);
@@ -349,19 +349,23 @@ app.factory('CreatorService', ['UserService', '$http', '$location', function(Use
     console.log(typeOfInput);
     if (typeOfInput.worldName){
       var world = typeOfInput;
+      console.log('current world object:', world);
       worldsObject.curWorld = world;
     } else if (typeOfInput.locName){
       var location = typeOfInput;
-      locationsObject.curLoc = location;
       console.log('displayDesc: ', location);
+      locationsObject.curLoc = location;
     } else if (typeOfInput.itemName){
       var item = typeOfInput;
+      console.log('current item object:', item);
       itemsObject.curItem = item;
     } else if (typeOfInput.sightDesc){
       var sight = typeOfInput;
+      console.log('current sight object:', sight);
       sightsObject.curSight = sight;
     } else if (typeOfInput.exitDesc){
       var exit = typeOfInput;
+      console.log('current exit object:', exit);
       exitsObject.curExit = exit;
     } else {
       messageObject.message = "display error: bad code";
