@@ -62,24 +62,24 @@ module.exports = function(grunt){
         dest: 'app/static/vendors/angular-ui-bootstrap/'
       },
     },
-    // watch: {
-    //   options: {
-    //     livereload: true
-    //   },
-    //   files: [
-    //     'client/**/*.*',
-    //     'client/**/**/*.*',
-    //     'client/**/**/**/*.*'
-    //   ],
-    //   //'uglify',
-    //   tasks: ['uglify', 'copy']
-    // }
+    watch: {
+      options: {
+        livereload: true
+      },
+      files: [
+        'client/**/*.*',
+        'client/**/**/*.*',
+        'client/**/**/**/*.*'
+      ],
+      // 'uglify',
+      tasks: ['uglify', 'copy']
+    }
   });
 
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-copy');
-  // grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-contrib-watch');
 
   //'watch'
-  grunt.registerTask('default', ['uglify', 'copy']);
+  grunt.registerTask('default', ['uglify', 'copy', 'watch']);
 };

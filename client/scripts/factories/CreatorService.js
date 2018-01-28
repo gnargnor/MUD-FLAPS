@@ -112,7 +112,7 @@ app.factory('CreatorService', ['UserService', '$http', '$location', function(Use
 
   /** location functions */
   var locGetter = function(curWorldId){
-    if (worldsObject.curWorld._id === ''){
+    if (!worldsObject.curWorld._id){
       console.log('curWorld not defined in locationGetter');
       return;
     }
@@ -132,11 +132,13 @@ app.factory('CreatorService', ['UserService', '$http', '$location', function(Use
 
   var locationCreator = function(newLoc){
     newLoc._world = worldsObject.curWorld._id;
-    console.log('newLoc._world: ', newLoc);
+    if (!newLoc.locNotes) {
+      newLoc.locNotes = '';
+    }
     $http.post('/location', newLoc)
       .then(function(response){
         console.log('locationCreator request: ', response);
-        locGetter(newLoc._world);
+        locGetter(worldsObject.curWorld._id);
         locationsObject.curLoc = response.data;
       });
   };
@@ -194,6 +196,9 @@ app.factory('CreatorService', ['UserService', '$http', '$location', function(Use
 
   var itemCreator = function(newItem){
     newItem._world = worldsObject.curWorld._id;
+    if (!newItem.itemNotes) {
+      newItem.itemNotes = '';
+    }
     $http.post('/item', newItem)
       .then(function(response){
         console.log('itemCreator request: ', response);

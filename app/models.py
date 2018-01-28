@@ -43,10 +43,19 @@ class World(db.Model):
 
     def serialize(self):
         return {
+            '_id': self.id,
             'worldName': self.name,
             'worldDesc': self.desc,
             'author': ''
         }
+        
+    # def add_location(self, location):
+    #     print('add location to world {0}'.format(location))
+    #     print('current locations: {0}'.format(_locations))
+
+    # def add_item(self, item):
+    #     print('add item to world: {0}'.format(item))
+    #     print('current items: {0}'.format(_items))
 
     def __repr__(self):
         return '<World {0} id {1}>'.format(self.name, self.id)
@@ -65,11 +74,20 @@ class Location(db.Model):
     short_desc = db.Column(db.String)
     notes = db.Column(db.String)
 
+    def __init__(self, world_id, name, desc, notes, creator_id):
+        self.world_id = world_id
+        self.date_created = datetime.now()
+        self.name = name
+        self.desc = desc
+        self.notes = notes
+        self.creator_id = creator_id
+        
+
     def serialize(self):
         return {
+            '_id': self.id,
             'locName': self.name,
             'locDesc': self.desc,
-            'locShortDesc': self.short_desc,
             'locNotes': self.notes
         }
 
@@ -89,8 +107,19 @@ class Item(db.Model):
     targets = db.Column(db.String)
     notes = db.Column(db.String)
 
+    def __init__(self, world_id, name, desc, notes, creator_id):
+        self.world_id = world_id
+        # change to inventory id - create inventory class
+        # self.location_id = location_id
+        self.date_created = datetime.now()
+        self.name = name
+        self.desc = desc
+        self.notes = notes
+        self.creator_id = creator_id
+
     def serialize(self):
         return {
+            '_id': self.id,
             'itemName': self.name,
             'itemDesc': self.desc,
             'itemNotes': self.notes
@@ -110,8 +139,18 @@ class Sight(db.Model):
     desc = db.Column(db.String)
     important = db.Column(db.Boolean)
 
+    def __init__(self, world_id, location_id, name, desc, important):
+        self.creator_id = current_user.id
+        self.world_id = world_id
+        self.location_id = location_id
+        self.date_created = datetime.now()
+        self.name = name
+        self.desc = desc
+        self.important = important
+
     def serialize(self):
         return {
+            '_id': self.id,
             'keyword': self.name,
             'sightDesc': self.desc,
             'isImportant': self.important
@@ -135,6 +174,7 @@ class Exit(db.Model):
 
     def serialize(self):
         return {
+            '_id': self.id,
             'exitDir': self.direction,
             'exitDesc': self.desc,
             '_destLoc': self.dest_loc,
