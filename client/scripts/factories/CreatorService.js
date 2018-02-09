@@ -144,6 +144,7 @@ app.factory('CreatorService', ['UserService', '$http', '$location', function(Use
   };
 
   var locationUpdater = function(curLoc){
+    console.log(curLoc)
     var putLoc = curLoc;
     curLoc = {};
     $http.put('/location', putLoc)

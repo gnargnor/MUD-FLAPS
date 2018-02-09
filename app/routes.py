@@ -2,7 +2,7 @@ from app import app, db
 from flask import request, redirect, url_for, send_from_directory, current_app, jsonify
 from werkzeug.security import generate_password_hash
 from flask_login import current_user, login_user, logout_user, login_required
-from app.models import User, World, Location, Item
+from app.models import User, World, Location, Item, Sight, Exit
 from app.helpers import pluck
 from app.forms import LoginForm
 
@@ -149,6 +149,64 @@ def item(_world_id=''):
             print('new item!')
             return jsonify(new_item.serialize())
         return 'error saving item'
+
+@app.route('/sight', methods=['POST'])
+@app.route('/sight/<_location_id>', methods=['GET'])
+@login_required
+def sight(_location_id=''):
+    if request.method == 'GET':  
+        print('loc id: {}'.format(_location_id))
+        print([sight.serialize() for sight in list(Sight.query.filter_by(location_id=_location_id).all())])
+        return jsonify([sight.serialize() for sight in list(Sight.query.filter_by(location_id=_location_id).all())])
+
+    if request.method == 'POST':
+        print('post route: ', request.get_json())
+        data = request.get_json()
+        keyword, sight_desc, important, location_id = pluck(data, 'keyword', 'sightDesc', 'isImportant', '_location')
+        sight = Sight(
+            location_id=_location,
+            keyword=keyword,
+            desc=sight_desc,
+            important=important,
+            creator_id=current_user.id
+        )
+        db.session.add(sight)
+        db.session.commit()
+        new_sight = Sight.query.filter_by(keyword=keyword, location_id=location_id, creator_id=current_user.id).first()
+        if new_sight:
+            print('new sight!')
+            return jsonify(new_sight.serialize())
+        return 'error saving sight'
+
+# Change to door
+@app.route('/exit', methods=['POST'])
+@app.route('/exit/<_location_id>', methods=['GET'])
+@login_required
+def exit(_location_id=''):
+    if request.method == 'GET':  
+        print('location id: {}'.format(_location_id))
+        print([door.serialize() for door in list(Exit.query.filter_by(location_id=_location_id).all())])
+        return jsonify([door.serialize() for door in list(Exit.query.filter_by(world_id=_world_id).all())])
+
+    if request.method == 'POST':
+        print('post route: ', request.get_json())
+        data = request.get_json()
+        exit_dir, exit_desc, is_open, is_unlocked, location_id = pluck(data, 'exitDir', 'exitDesc', 'open', 'unlocked', '_location')
+        door = Exit(
+            location_id=world_id,
+            direction=exit_dir,
+            desc=exit_desc,
+            is_open=is_open,
+            is_unlocked=is_unlocked,
+            creator_id=current_user.id
+        )
+        db.session.add(door)
+        db.session.commit()
+        new_door = Exit.query.filter_by(desc=exit_desc, creator_id=current_user.id).first()
+        if new_door:
+            print('new exit!')
+            return jsonify(new_door.serialize())
+        return 'error saving exit'
     
 
 
